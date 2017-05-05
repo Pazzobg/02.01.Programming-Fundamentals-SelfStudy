@@ -20,7 +20,7 @@
 
             while (command != "stop")
             {
-                string[] lineSplitted = command.Split(ArgumentsDelimiter);
+                string[] lineSplitted = command.Split(ArgumentsDelimiter); 
 
                 if (lineSplitted[0].Equals("add")
                     || lineSplitted[0].Equals("subtract")
