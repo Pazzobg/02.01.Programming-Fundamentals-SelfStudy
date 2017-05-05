@@ -7,91 +7,93 @@
     {
         private const char ArgumentsDelimiter = ' ';
 
-        public static void Main()
+        static void Main(string[] args)
         {
             int sizeOfArray = int.Parse(Console.ReadLine());
 
-            long[] array = Console.ReadLine()
+            int[] arrayToChange = Console.ReadLine()
                 .Split(ArgumentsDelimiter)
-                .Select(long.Parse)
+                .Select(int.Parse)
                 .ToArray();
 
-            string command = Console.ReadLine().Trim();
+            string command = Console.ReadLine();
 
             while (command != "stop")
             {
-                //string line = Console.ReadLine().Trim();
-                int[] args = new int[2];
+                string[] lineSplitted = command.Split(ArgumentsDelimiter);
 
-                if (command.Equals("add") ||
-                    command.Equals("substract") ||
-                    command.Equals("multiply"))
+                if (lineSplitted[0].Equals("add")
+                    || lineSplitted[0].Equals("subtract")
+                    || lineSplitted[0].Equals("multiply"))
                 {
-                    string[] stringParams = command.Split(ArgumentsDelimiter);
-                    args[0] = int.Parse(stringParams[0]);
-                    args[1] = int.Parse(stringParams[1]);
+                    int positionOfTheIndex = int.Parse(lineSplitted[1]);
+                    int valueToBeChangedWith = int.Parse(lineSplitted[2]);
 
-                    PerformAction(array, command, args);
+                    PerformAction(arrayToChange, lineSplitted[0], positionOfTheIndex, valueToBeChangedWith);
+                }
+                else if (lineSplitted[0].Equals("lshift"))
+                {
+                    ArrayShiftLeft(arrayToChange);
+                }
+                else
+                {
+                    ArrayShiftRight(arrayToChange);
                 }
 
-                PerformAction(array, command, args);
-
-                PrintArray(array);
-                Console.WriteLine('\n');
+                PrintArray(arrayToChange);
 
                 command = Console.ReadLine();
             }
         }
 
-        static void PerformAction(long[] arr, string action, int[] args)
+        static void PerformAction(int[] arrayToBeChanged, string action, int position, int value)
         {
-            long[] array = arr.Clone() as long[];
-            int pos = args[0];
-            int value = args[1];
 
             switch (action)
             {
                 case "multiply":
-                    array[pos] *= value;
+                    arrayToBeChanged[position - 1] *= value;
                     break;
                 case "add":
-                    array[pos] += value;
+                    arrayToBeChanged[position - 1] += value;
                     break;
                 case "subtract":
-                    array[pos] -= value;
-                    break;
-                case "lshift":
-                    ArrayShiftLeft(array);
-                    break;
-                case "rshift":
-                    ArrayShiftRight(array);
+                    arrayToBeChanged[position - 1] -= value;
                     break;
             }
         }
 
-        private static void ArrayShiftRight(long[] array)
+        private static void ArrayShiftRight(int[] array)
         {
+            int num = array[array.Length - 1];
             for (int i = array.Length - 1; i >= 1; i--)
             {
                 array[i] = array[i - 1];
             }
+            array[0] = num;
         }
 
-        private static void ArrayShiftLeft(long[] array)
+        private static void ArrayShiftLeft(int[] array)
         {
+            int num = array[0];
             for (int i = 0; i < array.Length - 1; i++)
             {
                 array[i] = array[i + 1];
             }
+            array[array.Length - 1] = num;
         }
 
-        private static void PrintArray(long[] array)
+        private static void PrintArray(int[] array)
         {
             for (int i = 0; i < array.Length; i++)
             {
-                Console.WriteLine(array[i] + " ");
+                if (i == array.Length - 1)
+                {
+                    Console.WriteLine(array[i] + " ");
+                    break;
+                }
+                Console.Write(array[i] + " ");
             }
         }
     }
-
 }
