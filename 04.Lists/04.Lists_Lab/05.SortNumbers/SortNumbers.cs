@@ -12,7 +12,7 @@
 
             inputList.Sort();
 
-            Console.WriteLine(string.Join(" <= ", inputList));
+            Console.WriteLine(string.Join(" <= ", inputList)); 
         }
     }
 }
