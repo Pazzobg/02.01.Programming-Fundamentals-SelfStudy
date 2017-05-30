@@ -8,6 +8,22 @@
     {
         public static void Main()
         {
+			// Shorter solution (even two solutions)
+			// var input = Console.ReadLine().Split(' ').Select(int.Parse).ToList();
+            // int k = input.Count / 4;
+            // 
+            // var topLeft = input.Take(k).Reverse().ToList();
+            // var topRight = input.Skip(3 * k).Take(k).Reverse().ToList();
+            // var topRow = topLeft.Concat(topRight).ToList();
+            // var bottomRow = input.Skip(k).Take(2 * k).ToList();
+            // 
+            // var result = topRow.Select((x, index) => x + bottomRow[index]); // .Select - Solution
+            // 
+            // //var result = topRow.Zip(bottomRow, (x, y) => (x + y));        // .Zip - Solution
+            // 
+            // Console.WriteLine(string.Join(" ", result));
+
+			
             int[] numbers = Console.ReadLine().Split(' ').Select(int.Parse).ToArray();
 
             int n = numbers.Length / 4;
