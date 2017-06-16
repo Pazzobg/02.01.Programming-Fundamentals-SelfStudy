@@ -8,123 +8,127 @@
     {
         public static void Main()
         {
-            var venuesDict = new Dictionary<string, Dictionary<string, long>>();
+            var venues = new Dictionary<string, Dictionary<string, int>>();
 
-            string[] input = Console.ReadLine().Split(' ');
+            string line = Console.ReadLine();
 
-            while (input[0] != "End")
+            while (line != "End")
             {
-                bool foundAt = false;
-                for (int i = 0; i < input.Length; i++)
+
+                string[] input = line.Split(' ');
+
+                // Check if input consists of 4 parts
+                if (input.Length < 4)
                 {
-                    if (input[i].Contains("@"))
+                    line = Console.ReadLine();
+                    continue;
+                }
+
+                // Check if there's an input part, starting with @. Loop doesn't start from 0, as if input[0] 
+                bool atFound = false;   // starts with an @, then it's obviously wrong
+                int venueStart = 0;
+                for (int i = 1; i < input.Length; i++)
+                {
+                    if (input[i].StartsWith("@"))
                     {
-                        foundAt = true;
+                        atFound = true;
+                        venueStart = i;
                         break;
                     }
                 }
-
-                if (!foundAt)
+                if (!atFound)
                 {
-                    input = Console.ReadLine().Split(' ');
+                    line = Console.ReadLine();
                     continue;
                 }
 
-                long outValue = 0;
-                bool lastIsNumber = long.TryParse(input[input.Length - 1], out outValue);
-                bool forelastIsNumber = long.TryParse(input[input.Length - 2], out outValue);
-                if (!lastIsNumber || !forelastIsNumber)
+                // Build artist name
+                string artist = line.Substring(0, line.IndexOf('@'));
+                //string artist = string.Empty;
+                //for (int i = 0; i < venueStart; i++)
+                //{
+                //    artist += input[i];
+                //    artist += " ";
+                //}
+                //artist = artist.TrimEnd();
+
+                // Check if artist's name is of up to 3 words
+                if ((artist.Split(' ')).Length > 3)
                 {
-                    input = Console.ReadLine().Split(' ');
+                    line = Console.ReadLine();
                     continue;
                 }
 
-                if (input.Length >= 4) // Strah loze pazi :D
-                {
-                    string artist = GetArtist(input);
-                    string venue = GetVenue(input);
-                    string ticketsSold = input[input.Length - 1];
-                    string ticketPrice = input[input.Length - 2];
-                    long totalTicketRevenue = long.Parse(ticketPrice) * long.Parse(ticketsSold);
-
-                    if (!venuesDict.ContainsKey(venue))
-                    {
-                        venuesDict[venue] = new Dictionary<string, long>();
-                    }
-
-                    if (!venuesDict[venue].ContainsKey(artist))
-                    {
-                        venuesDict[venue][artist] = 0;
-                    }
-
-                    venuesDict[venue][artist] += totalTicketRevenue;
-
-                    input = Console.ReadLine().Split(' ');
-                }
-                else
-                {
-                    input = Console.ReadLine().Split(' ');
-                }
-            }
-
-            foreach (var kvp in venuesDict)
-            {
-                string venue = kvp.Key;
-                var artistsAndProfit = kvp.Value;
-
-                Console.WriteLine(venue);
-
-                foreach (var kvpInner in artistsAndProfit.OrderByDescending(x => x.Value))
-                {
-                    string artist = kvpInner.Key;
-                    long profit = kvpInner.Value;
-
-                    Console.WriteLine($"#  {artist} -> {profit}");
-                }
-            }
-        }
-
-        public static string GetArtist(string[] input)
-        {
-            string name = string.Empty;
-
-            for (int i = 0; i < input.Length; i++)
-            {
-                if (!input[i].Contains("@"))
-                {
-                    name += input[i];
-                    name += " ";
-                }
-                else
-                {
-                    break;
-                }
-            }
-
-            return name.TrimEnd();
-        }
-
-        public static string GetVenue(string[] input)
-        {
-            string venueName = string.Empty;
-            bool venueStarted = false;
-
-            for (int i = 0; i < input.Length - 2; i++)
-            {
-                if (input[i].Contains("@") && !venueStarted)
-                {
-                    venueName += input[i];
-                    venueName += " ";
-                    venueStarted = true;
-                }
-                else if (venueStarted)
+                // Build venue name
+                string venueName = string.Empty;
+                for (int i = venueStart; i < input.Length - 2; i++)
                 {
                     venueName += input[i];
                     venueName += " ";
                 }
+                venueName = venueName.TrimEnd();
+
+                // Check if venue's name is of up to 3 words
+                if ((venueName.Split(' ')).Length > 3)
+                {
+                    line = Console.ReadLine();
+                    continue;
+                }
+
+                // Check if there's another @
+                bool anotherAt = false;
+                for (int i = 1; i < venueName.Length; i++)
+                {
+                    if (venueName[i].Equals(new char[] { '@', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' }))
+                    {
+                        anotherAt = true;
+                        break;
+                    }
+                }
+                if (anotherAt)
+                {
+                    line = Console.ReadLine();
+                    continue;
+                }
+
+                venueName = venueName.TrimStart('@');
+
+                int ticketPrice = 0;
+                bool priceExists = int.TryParse(input[input.Length - 2], out ticketPrice);
+                int ticketCount = 0;
+                bool countExists = int.TryParse(input[input.Length - 1], out ticketCount);
+                if (!priceExists || !countExists)
+                {
+                    line = Console.ReadLine();
+                    continue;
+                }
+
+                if (!venues.ContainsKey(venueName))
+                {
+                    venues[venueName] = new Dictionary<string, int>();
+                }
+
+                if (!venues[venueName].ContainsKey(artist))
+                {
+                    venues[venueName][artist] = 0;
+                }
+
+                venues[venueName][artist] += ticketPrice * ticketCount;
+
+                line = Console.ReadLine();
             }
 
-            return venueName.Trim(new[] { '@', ' ' });
+            foreach (var outerKvp in venues)
+            {
+                Console.WriteLine(outerKvp.Key);
+
+                var artistsAtVenue = outerKvp.Value;
+
+                foreach (var innerKvp in artistsAtVenue.OrderByDescending(x => x.Value))
+                {
+                    Console.WriteLine($"#  {innerKvp.Key} -> {innerKvp.Value}");
+                }
+            }
         }
     }
 }

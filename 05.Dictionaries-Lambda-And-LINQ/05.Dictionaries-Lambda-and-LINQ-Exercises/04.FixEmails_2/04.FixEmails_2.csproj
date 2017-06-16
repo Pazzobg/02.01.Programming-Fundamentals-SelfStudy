@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6B70C90D-67AD-4001-9E64-6F8293BEC74C}</ProjectGuid>
+    <ProjectGuid>{16DF7FE1-AB89-4BA1-AEBE-4612A0D259AD}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>_10.SrybskoUnleashed</RootNamespace>
-    <AssemblyName>10.SrybskoUnleashed</AssemblyName>
+    <RootNamespace>_04.FixEmails_2</RootNamespace>
+    <AssemblyName>04.FixEmails_2</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -42,7 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SrybskoUnleashed.cs" />
+    <Compile Include="FixEmails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
