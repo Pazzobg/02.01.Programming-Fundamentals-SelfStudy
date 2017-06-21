@@ -1,0 +1,9 @@
+﻿namespace _02.OptimizedBankingSystem
+{
+    public class BankAccount
+    {
+        public string Name { get; set; }
+        public string Bank { get; set; }
+        public decimal Ballance { get; set; }
+    }
+}
